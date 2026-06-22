@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogList from '../../components/BlogList';
+import type { Project, PostData } from '../../types';
+
+const projectModules = import.meta.glob<Project>('/data-encrypted/projects/*.enc.json', { eager: true });
+const projects = Object.fromEntries(
+  (Object.values(projectModules) as Project[]).map((p) => [p.id, p])
+);
+
+const allPosts = await getCollection('posts');
+const posts: PostData[] = allPosts.map((entry) => {
+  const cleanId = entry.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '');
+  const parts = cleanId.split('/');
+  const projectId = parts[0];
+  const postId = parts.slice(1).join('/');
+  const project = projects[projectId];
+  const excerpt = entry.body
+    ?.split('\n\n')
+    .find((p) => p.trim() && !p.trim().startsWith('#'))
+    ?.replace(/[*_`[\]()#>]/g, '')
+    .trim() ?? '';
+  return {
+    id: postId,
+    title: entry.data.title,
+    project_id: projectId,
+    project_title: project?.title ?? projectId,
+    published_at: entry.data.published_at,
+    updated_at: entry.data.updated_at,
+    tags: entry.data.tags,
+    slug: `/blog/${projectId}/${postId}`,
+    excerpt,
+    effective_date: entry.data.updated_at ?? entry.data.published_at,
+  };
+});
+---
+
+<BaseLayout title="Blog">
+  <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:1.5rem;">Blog</h1>
+  <BlogList client:load posts={posts} />
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectsGrid from '../components/ProjectsGrid';
+import type { Project } from '../types';
+
+const projectModules = import.meta.glob<Project>('/data-encrypted/projects/*.enc.json', { eager: true });
+const projects = Object.values(projectModules) as Project[];
+---
+
+<BaseLayout title="Projects">
+  <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:1.5rem;">Projects</h1>
+  <ProjectsGrid client:load projects={projects} />
+</BaseLayout>

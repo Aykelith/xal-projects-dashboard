@@ -1,0 +1,30 @@
+{
+  "id": "xal-ai-projects",
+  "title": null,
+  "stage": null,
+  "started_at": null,
+  "last_activity_at": null,
+  "last_task_id": null,
+  "last_post_id": null,
+  "home_description": null,
+  "enc_title": {
+    "iv": "9b4337ef9c480a918b2fbd7d",
+    "data": "6kvg+GFJCtqHPkcinJ4s9JcYTwykB/SR+zxIC9yd7g=="
+  },
+  "enc_stage": {
+    "iv": "c582618d6c026203738923d9",
+    "data": "lt3jpfYAzPVg4/AOdAW0AvcThNB0LY/w0hSR"
+  },
+  "enc_started_at": {
+    "iv": "23eb391ab8688c5fae8020f8",
+    "data": "69fmeZou3tV7Sls92mwsE2y4YPYL+TqagLV3s8yYZWwELpbQnCxatA=="
+  },
+  "enc_last_activity_at": {
+    "iv": "52d4f48bd1a25ae3ed1ceb32",
+    "data": "iibmSwxCPggQBmBLnQQXZWVwnNlBNa291h5sIS5FDwgYyN3hXdx3eA=="
+  },
+  "enc_home_description": {
+    "iv": "97c9df81eceb0c165c865049",
+    "data": "P4ssaRP/XBC8tNgnxA4sp9BT8I/hLvbVP0rfArZRwJhXgEkXs2ied42yNwmc19dwmeWom/HrrE7PBppWk4UDMxPuEmqu"
+  }
+}

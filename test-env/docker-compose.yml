@@ -1,0 +1,9 @@
+services:
+  test:
+    build:
+      context: ..
+      dockerfile: test-env/Dockerfile
+    environment:
+      - CI=true
+    volumes:
+      - ./fixtures/data:/app/data

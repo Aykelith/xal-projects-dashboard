@@ -1,0 +1,39 @@
+---
+import '../styles/global.css';
+import { existsSync } from 'node:fs';
+import PasswordGate from '../components/encryption/PasswordGate';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Personal project dashboard' } = Astro.props;
+const currentPath = Astro.url.pathname;
+const isEncrypted = existsSync('./public/enc/config.json');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · xal-dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="/" class="site-logo">xal-dashboard</a>
+      <nav class="site-nav">
+        <a href="/" class:list={[{ active: currentPath === '/' }]}>Projects</a>
+        <a href="/blog" class:list={[{ active: currentPath.startsWith('/blog') }]}>Blog</a>
+        <a href="/help" class:list={[{ active: currentPath === '/help' }]}>Help</a>
+      </nav>
+    </header>
+    <PasswordGate isEncrypted={isEncrypted} client:load />
+    <main class="site-main">
+      <slot />
+    </main>
+    <footer class="site-footer">xal-dashboard</footer>
+  </body>
+</html>

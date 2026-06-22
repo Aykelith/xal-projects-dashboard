@@ -1,0 +1,1 @@
+const a={idea:"Idea",planning:"Planning",in_progress:"In Progress",in_production:"In Production",done:"Done",abandoned:"Abandoned"},o=["idea","planning","in_progress","in_production","done","abandoned"],d=o.filter(n=>n!=="abandoned");export{o as A,d as D,a as S};

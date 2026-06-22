@@ -1,0 +1,26 @@
+node_modules
+playwright-report
+test-results
+
+# Personal data — plaintext source (never commit; use pnpm encrypt to populate src/content + data-encrypted)
+data/*
+!data/projects/
+!data/content/
+!data/descriptions/
+data/projects/*
+data/content/*
+data/descriptions/*
+!data/content/tasks/
+!data/content/posts/
+!data/content/descriptions/
+data/content/tasks/*
+data/content/posts/*
+data/content/descriptions/*
+!data/projects/.empty
+!data/content/tasks/.empty
+!data/content/posts/.empty
+!data/content/descriptions/.empty
+
+# Unencrypted photos (encrypted .enc counterparts are committed)
+public/photos/home_page/*.jpg
+public/photos/covers/*.jpg

@@ -1,0 +1,145 @@
+---
+import { getCollection, render } from 'astro:content';
+import { existsSync } from 'node:fs';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPostCard from '../../components/BlogPostCard';
+import EncryptedContent from '../../components/encryption/EncryptedContent';
+import EncryptedImage from '../../components/encryption/EncryptedImage';
+import DecryptAllButton from '../../components/encryption/DecryptAllButton';
+import ProjectPageHeader from '../../components/ProjectPageHeader';
+import type { Project, PostData } from '../../types';
+import { formatDate } from '../../utils/date';
+
+const projectModules = import.meta.glob<Project>('/data-encrypted/projects/*.enc.json', { eager: true });
+const allProjects = Object.values(projectModules) as Project[];
+
+export async function getStaticPaths() {
+  const projectMods = import.meta.glob<Project>('/data-encrypted/projects/*.enc.json', { eager: true });
+  const projects = Object.values(projectMods) as Project[];
+  return projects.map((p) => ({ params: { id: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props as { project: Project };
+
+const allTasks = await getCollection('tasks');
+const projectTasks = allTasks
+  .filter((t) => t.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '').split('/')[0] === project.id)
+  .sort((a, b) => b.id.localeCompare(a.id));
+
+const activeTask = projectTasks.find(
+  (t) => t.data.stage === 'started'
+);
+
+const allPosts = await getCollection('posts');
+const projectPosts = allPosts
+  .filter((p) => p.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '').split('/')[0] === project.id)
+  .sort((a, b) => b.id.localeCompare(a.id));
+
+const latestPost = projectPosts[0];
+let latestPostData: PostData | null = null;
+if (latestPost) {
+  const cleanId = latestPost.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '');
+  const parts = cleanId.split('/');
+  const postId = parts.slice(1).join('/');
+  const excerpt = latestPost.body
+    ?.split('\n\n')
+    .find((p) => p.trim() && !p.trim().startsWith('#'))
+    ?.replace(/[*_`[\]()#>]/g, '')
+    .trim() ?? '';
+  latestPostData = {
+    id: postId,
+    title: latestPost.data.title,
+    project_id: project.id,
+    project_title: project.title ?? project.id,
+    published_at: latestPost.data.published_at,
+    updated_at: latestPost.data.updated_at,
+    tags: latestPost.data.tags,
+    slug: `/blog/${project.id}/${postId}`,
+    excerpt,
+    effective_date: latestPost.data.updated_at ?? latestPost.data.published_at,
+  };
+}
+
+const descEntries = await getCollection('descriptions');
+const descEntry = descEntries.find((d) => {
+  const fname = d.filePath?.split('/').pop() ?? d.id;
+  return fname.replace(/\.enc(?:\.md)?$|\.md$/, '') === project.id;
+});
+let DescContent: any = null;
+if (descEntry) {
+  const rendered = await render(descEntry);
+  DescContent = rendered.Content;
+}
+
+const isEncrypted = existsSync('./public/enc/config.json');
+---
+
+<BaseLayout title={project.title ?? project.id} description="">
+  <div>
+    {isEncrypted ? (
+      <>
+        <DecryptAllButton client:load />
+        <EncryptedImage
+          encSrc={`/photos/covers/${project.id}.enc`}
+          alt=""
+          className="cover-image"
+          decryptOnLoad={true}
+          client:load
+        />
+      </>
+    ) : (
+      <img
+        src={`/photos/covers/${project.id}.jpg`}
+        alt=""
+        class="cover-image"
+        onerror="this.style.display='none'"
+      />
+    )}
+
+    <ProjectPageHeader project={project} client:load />
+
+    <h2 class="section-title">Active Task</h2>
+    {activeTask ? (
+      <div class="active-task-box">
+        <div class="meta-item" style="margin-bottom:0.5rem;">
+          <span class="meta-label">Stage</span>
+          <span class="stage-badge" data-stage={activeTask.data.stage}>
+            {activeTask.data.stage}
+          </span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Started</span>
+          <span class="meta-value">{formatDate(activeTask.data.started_at)}</span>
+        </div>
+      </div>
+    ) : (
+      <p class="no-content">No active task.</p>
+    )}
+
+    <h2 class="section-title">Latest Post</h2>
+    {latestPostData ? (
+      <BlogPostCard client:load post={latestPostData} />
+    ) : (
+      <p class="no-content">No posts yet.</p>
+    )}
+
+    {descEntry?.data?.enc_body ? (
+      <>
+        <h2 class="section-title">About</h2>
+        <EncryptedContent
+          envelope={descEntry.data.enc_body}
+          type="text"
+          className="prose"
+          client:load
+        />
+      </>
+    ) : DescContent ? (
+      <>
+        <h2 class="section-title">About</h2>
+        <article class="prose">
+          <DescContent />
+        </article>
+      </>
+    ) : null}
+  </div>
+</BaseLayout>

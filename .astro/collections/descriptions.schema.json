@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "enc_body": {
+      "type": "object",
+      "properties": {
+        "iv": {
+          "type": "string"
+        },
+        "data": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "iv",
+        "data"
+      ]
+    }
+  }
+}

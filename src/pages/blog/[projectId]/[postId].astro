@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EncryptedContent from '../../../components/encryption/EncryptedContent';
+import type { Project } from '../../../types';
+import { formatDate } from '../../../utils/date';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts');
+  return allPosts.map((entry) => {
+    const cleanId = entry.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '');
+    const parts = cleanId.split('/');
+    const projectId = parts[0];
+    const postId = parts.slice(1).join('/');
+    return {
+      params: { projectId, postId },
+      props: { entry },
+    };
+  });
+}
+
+const { entry } = Astro.props;
+const { projectId, postId } = Astro.params;
+
+const projectModules = import.meta.glob<Project>('/data-encrypted/projects/*.enc.json', { eager: true });
+const allProjects = Object.values(projectModules) as Project[];
+const project = allProjects.find((p) => p.id === projectId);
+
+const encBody = entry.data.enc_body;
+const { Content } = encBody ? { Content: null } : await render(entry);
+---
+
+<BaseLayout title={entry.data.title}>
+  <article>
+    <div class="post-header">
+      <h1 class="post-title">{entry.data.title}</h1>
+      <div class="post-meta">
+        {project && (
+          <a href={`/projects/${project.id}`} style="font-weight:600;color:var(--accent);">
+            {project.title}
+          </a>
+        )}
+        <span>Published {formatDate(entry.data.published_at)}</span>
+        {entry.data.updated_at && (
+          <span>· Updated {formatDate(entry.data.updated_at)}</span>
+        )}
+        {entry.data.tags.length > 0 && (
+          <div class="blog-card-tags" style="display:flex;gap:0.375rem;flex-wrap:wrap;">
+            {entry.data.tags.map((tag: string) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+    <div class="prose">
+      {encBody ? (
+        <EncryptedContent envelope={encBody} type="text" client:load />
+      ) : (
+        Content && <Content />
+      )}
+    </div>
+  </article>
+</BaseLayout>

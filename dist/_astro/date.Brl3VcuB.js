@@ -1,0 +1,1 @@
+function o(n){const t=new Date(n),e=a=>String(a).padStart(2,"0");return`${e(t.getDate())}/${e(t.getMonth()+1)}/${t.getFullYear()} ${e(t.getHours())}:${e(t.getMinutes())}`}function r(n){return Math.floor((Date.now()-new Date(n).getTime())/864e5)}export{r as d,o as f};
