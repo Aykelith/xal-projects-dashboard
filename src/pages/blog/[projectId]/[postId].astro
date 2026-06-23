@@ -8,10 +8,8 @@ import { formatDate } from '../../../utils/date';
 export async function getStaticPaths() {
   const allPosts = await getCollection('posts');
   return allPosts.map((entry) => {
-    const cleanId = entry.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '');
-    const parts = cleanId.split('/');
-    const projectId = parts[0];
-    const postId = parts.slice(1).join('/');
+    const projectId = entry.data.project_id;
+    const postId = entry.data.id.toLowerCase();
     return {
       params: { projectId, postId },
       props: { entry },
@@ -37,7 +35,7 @@ const { Content } = encBody ? { Content: null } : await render(entry);
       <div class="post-meta">
         {project && (
           <a href={`/projects/${project.id}`} style="font-weight:600;color:var(--accent);">
-            {project.title}
+            {project.title ?? project.id}
           </a>
         )}
         <span>Published {formatDate(entry.data.published_at)}</span>

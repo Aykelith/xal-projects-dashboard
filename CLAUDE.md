@@ -83,7 +83,7 @@ A static website to track personal projects — their status, progress, tasks, a
 | `last_post_id` | String | **Generated** — ULID of latest post |
 | `home_description` | String | HTML string shown on home page card |
 
-**Stage values:** `idea` | `planning` | `in_progress` | `in_production` | `done` | `abandoned`
+**Stage values:** `idea` | `planning` | `in_progress` | `in_production` | `done` | `on_hold` | `abandoned`
 
 ### Task MDX frontmatter (`src/content/tasks/[project_id]/[task_ulid].mdx`)
 
@@ -147,7 +147,7 @@ Run `pnpm generate` (calls `scripts/generate-fields.mjs`) on plaintext files **b
 
 - Lists all projects as cards, sorted by `last_activity_at` descending by default.
 - Client-side sort toggle: `started_at` or `last_activity_at`.
-- Client-side stage filter (multi-select); `abandoned` hidden by default.
+- Client-side stage filter (multi-select); `abandoned` and `on_hold` hidden by default.
 - Paginated (10 items per page); current page reflected in URL as `?page=N`.
 - Each card: thumbnail (left ~20%), project details (right): title, created date, days since created, last update date, days since last update, stage badge, link button, `home_description`.
 

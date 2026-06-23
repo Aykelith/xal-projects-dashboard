@@ -11,16 +11,15 @@ const projects = Object.fromEntries(
 
 const allPosts = await getCollection('posts');
 const posts: PostData[] = allPosts.map((entry) => {
-  const cleanId = entry.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '');
-  const parts = cleanId.split('/');
-  const projectId = parts[0];
-  const postId = parts.slice(1).join('/');
+  const projectId = entry.data.project_id;
+  const postId = entry.data.id.toLowerCase();
   const project = projects[projectId];
-  const excerpt = entry.body
-    ?.split('\n\n')
-    .find((p) => p.trim() && !p.trim().startsWith('#'))
-    ?.replace(/[*_`[\]()#>]/g, '')
-    .trim() ?? '';
+  const excerpt = entry.data.excerpt ??
+    entry.body
+      ?.split('\n\n')
+      .find((p) => p.trim() && !p.trim().startsWith('#'))
+      ?.replace(/[*_`[\]()#>]/g, '')
+      .trim() ?? '';
   return {
     id: postId,
     title: entry.data.title,

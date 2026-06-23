@@ -1,0 +1,30 @@
+{
+  "id": "bible-trials-mvp",
+  "title": null,
+  "stage": null,
+  "started_at": null,
+  "last_activity_at": null,
+  "last_task_id": null,
+  "last_post_id": null,
+  "home_description": null,
+  "enc_title": {
+    "iv": "8405a66b21190d2e96660669",
+    "data": "oUdWQoBR4zDlU+wrd9+ACVTTNNcLgXnF4Tfrr2IoBcw="
+  },
+  "enc_stage": {
+    "iv": "796906d14a4bc0a96f369ca5",
+    "data": "zx6EDM0W+hLS7Y5Wv8TfMBBrAOHqZa0="
+  },
+  "enc_started_at": {
+    "iv": "0026be0c7cf2191abb338b86",
+    "data": "XvnqXyCZY7Fn92JZBE8QjoSDw75iTnIdyWo/49BcmzfEyMySgJSzcA=="
+  },
+  "enc_last_activity_at": {
+    "iv": "4e9daea1da323ce4f1186430",
+    "data": "Am1tbgNNe5IjiMdCCU7ZXL4pzpdpAmgycGafMdTZ3A2G2MBksPDt6A=="
+  },
+  "enc_home_description": {
+    "iv": "2ae1086bb06eeb178876596e",
+    "data": "JB7hl9txpA+RB5MWzcDSPtCSkJwnODRpwe+bqbjrQHtdB3uYwetYEz5xf87vfnPJnJGRghlArPwMCLg73cMEh4dOUByz"
+  }
+}

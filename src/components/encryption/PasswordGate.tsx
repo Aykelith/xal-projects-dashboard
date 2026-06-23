@@ -24,6 +24,8 @@ async function importRawKey(bytes: Uint8Array): Promise<CryptoKey> {
 }
 
 export default function PasswordGate({ isEncrypted }: Props) {
+  // pageLoading starts true for encrypted builds so the overlay covers any flash before key is restored
+  const [pageLoading, setPageLoading] = useState(isEncrypted);
   const [visible, setVisible] = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,28 +33,52 @@ export default function PasswordGate({ isEncrypted }: Props) {
 
   useEffect(() => {
     if (!isEncrypted) return;
-    const onUnlock = () => setVisible(false);
+
+    const hidePageLoading = () => setTimeout(() => setPageLoading(false), 300);
+
+    const onUnlock = () => { setVisible(false); hidePageLoading(); };
+    const onFailed = () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      setPageLoading(false);
+      setVisible(true);
+    };
     window.addEventListener('decrypt:unlocked', onUnlock);
+    window.addEventListener('decrypt:failed', onFailed);
 
     if (getKey()) {
-      // Key already in memory (same page context).
+      // Key already in memory — islands will decrypt on their own; wait for them
+      hidePageLoading();
     } else {
-      // Try to restore from sessionStorage.
       const stored = sessionStorage.getItem(SESSION_KEY);
       if (stored) {
         importRawKey(b64ToBytes(stored))
           .then((key) => setKey(key))
           .catch(() => {
             sessionStorage.removeItem(SESSION_KEY);
+            setPageLoading(false);
             setVisible(true);
           });
       } else {
+        setPageLoading(false);
         setVisible(true);
       }
     }
 
-    return () => window.removeEventListener('decrypt:unlocked', onUnlock);
+    return () => {
+      window.removeEventListener('decrypt:unlocked', onUnlock);
+      window.removeEventListener('decrypt:failed', onFailed);
+    };
   }, [isEncrypted]);
+
+  if (!isEncrypted) return null;
+
+  if (pageLoading) {
+    return (
+      <div className="page-loading-overlay">
+        <div className="page-loading-spinner" />
+      </div>
+    );
+  }
 
   if (!visible) return null;
 
@@ -95,8 +121,10 @@ export default function PasswordGate({ isEncrypted }: Props) {
       sessionStorage.setItem(SESSION_KEY, btoa(String.fromCharCode(...new Uint8Array(exported))));
       // Re-import as non-extractable for the in-memory key.
       const nonExtractable = await importRawKey(new Uint8Array(exported));
-      setKey(nonExtractable);
+      // Show page-loading spinner while content decrypts after unlock
       setVisible(false);
+      setPageLoading(true);
+      setKey(nonExtractable);
     } catch {
       setError('Wrong password.');
     } finally {

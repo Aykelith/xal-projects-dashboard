@@ -32,20 +32,19 @@ const activeTask = projectTasks.find(
 
 const allPosts = await getCollection('posts');
 const projectPosts = allPosts
-  .filter((p) => p.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '').split('/')[0] === project.id)
+  .filter((p) => p.data.project_id === project.id)
   .sort((a, b) => b.id.localeCompare(a.id));
 
 const latestPost = projectPosts[0];
 let latestPostData: PostData | null = null;
 if (latestPost) {
-  const cleanId = latestPost.id.replace(/\.enc(?:\.mdx?)?$|\.mdx?$/, '');
-  const parts = cleanId.split('/');
-  const postId = parts.slice(1).join('/');
-  const excerpt = latestPost.body
-    ?.split('\n\n')
-    .find((p) => p.trim() && !p.trim().startsWith('#'))
-    ?.replace(/[*_`[\]()#>]/g, '')
-    .trim() ?? '';
+  const postId = latestPost.data.id.toLowerCase();
+  const excerpt = latestPost.data.excerpt ??
+    latestPost.body
+      ?.split('\n\n')
+      .find((p) => p.trim() && !p.trim().startsWith('#'))
+      ?.replace(/[*_`[\]()#>]/g, '')
+      .trim() ?? '';
   latestPostData = {
     id: postId,
     title: latestPost.data.title,
@@ -128,7 +127,7 @@ const isEncrypted = existsSync('./public/enc/config.json');
         <h2 class="section-title">About</h2>
         <EncryptedContent
           envelope={descEntry.data.enc_body}
-          type="text"
+          type="markdown"
           className="prose"
           client:load
         />

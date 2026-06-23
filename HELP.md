@@ -21,7 +21,7 @@ This page describes how to add and manage content in the dashboard.
 }
 ```
 
-**Stage values:** `idea` · `planning` · `in_progress` · `in_production` · `done` · `abandoned`
+**Stage values:** `idea` · `planning` · `in_progress` · `in_production` · `done` · `on_hold` · `abandoned`
 
 2. (Optional) Add a long-form description at `data/content/descriptions/[project-id].md` — body-only MDX, no frontmatter required.
 

@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
-import { getKey, decrypt, type Envelope } from '../../lib/decryptWorker';
+import { marked } from 'marked';
+import { getKey, clearKey, decrypt, type Envelope } from '../../lib/decryptWorker';
 
 interface Props {
   envelope: Envelope;
-  // ponytail: 'text' renders as <pre> (raw markdown); switch type to 'html' for pre-rendered HTML
-  type?: 'html' | 'text';
+  type?: 'html' | 'text' | 'markdown';
   className?: string;
 }
 
 export default function EncryptedContent({ envelope, type = 'html', className }: Props) {
   const [content, setContent] = useState<string | null>(null);
-  const [error, setError] = useState(false);
 
   async function tryDecrypt(key: CryptoKey) {
     try {
@@ -20,32 +19,28 @@ export default function EncryptedContent({ envelope, type = 'html', className }:
       setContent(text);
     } catch (e) {
       console.error('[EncryptedContent] decrypt error:', e);
-      setError(true);
+      clearKey();
     }
   }
 
   useEffect(() => {
-    const key = getKey();
-    if (key) {
-      tryDecrypt(key);
-      return;
-    }
     const onUnlock = () => {
       const k = getKey();
       if (k) tryDecrypt(k);
     };
     window.addEventListener('decrypt:unlocked', onUnlock);
+    const key = getKey();
+    if (key) tryDecrypt(key);
     return () => window.removeEventListener('decrypt:unlocked', onUnlock);
   }, []);
-
-  if (error) {
-    return <p style={{ color: 'var(--stage-abandoned)', fontSize: '0.875rem' }}>Decryption failed.</p>;
-  }
   if (content === null) {
     return <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>🔒 Encrypted — enter password to view.</p>;
   }
   if (type === 'html') {
     return <div className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+  }
+  if (type === 'markdown') {
+    return <div className={className} dangerouslySetInnerHTML={{ __html: marked.parse(content) as string }} />;
   }
   return <pre className={`encrypted-markdown${className ? ` ${className}` : ''}`}>{content}</pre>;
 }

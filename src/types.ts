@@ -9,6 +9,7 @@ export type ProjectStage =
   | 'in_progress'
   | 'in_production'
   | 'done'
+  | 'on_hold'
   | 'abandoned';
 
 export interface Project {

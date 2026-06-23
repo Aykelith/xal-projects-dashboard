@@ -93,7 +93,7 @@ test.describe('Home page — encrypted content', () => {
     await page.goto('/');
     await unlockCorrect(page);
     // EncryptedImage (decryptOnLoad=true) sets src to blob: URL once decrypted.
-    await expect(page.locator('.project-card-image img')).toHaveAttribute('src', /^blob:/, {
+    await expect(page.locator('.project-card-image img').first()).toHaveAttribute('src', /^blob:/, {
       timeout: 10_000,
     });
   });

@@ -36,7 +36,7 @@ function restoreTestContent() {
     title: 'Test Project',
     stage: 'in_progress',
     started_at: '2026-01-01T00:00:00.000Z',
-    last_activity_at: '2026-06-19T19:59:05.505Z',
+    last_activity_at: '2099-12-31T23:59:59.999Z',
     last_task_id: '01JX0V2PK8ABCDEF0000000001',
     last_post_id: '01JX0V2PK8ABCDEF0000000002',
     home_description: '<p>Home description for test project.</p>',

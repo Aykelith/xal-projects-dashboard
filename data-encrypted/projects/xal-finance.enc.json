@@ -1,0 +1,30 @@
+{
+  "id": "xal-finance",
+  "title": null,
+  "stage": null,
+  "started_at": null,
+  "last_activity_at": null,
+  "last_task_id": null,
+  "last_post_id": null,
+  "home_description": null,
+  "enc_title": {
+    "iv": "48fc758143b24ad8fe0375b6",
+    "data": "urnGKHRe0LoOisuJNNylCCVSbQBwTf8EzWW5"
+  },
+  "enc_stage": {
+    "iv": "07cbad4e25128e6ede88af28",
+    "data": "RjQBMI9Ttg7WBSoqI8E5YVmk9yOK/Ws="
+  },
+  "enc_started_at": {
+    "iv": "bc15eaf20bc33ee766bfb555",
+    "data": "kH9/IUS1C3BMlqHE91bP+CdFxdyr9ir/tAMUUaRC3UC50uYOdxh0Yg=="
+  },
+  "enc_last_activity_at": {
+    "iv": "cde86ef261cdcc08af10bc03",
+    "data": "wVoy6sZ5SVogawpSLUNOpyCLemcW+Zsi+oKAT2Vam0YIEZ+kEB8lcQ=="
+  },
+  "enc_home_description": {
+    "iv": "230dc3b70d033605dd006a69",
+    "data": "//+jARPcxl9/ZnS6k1OY99BEb3+smhFZW1hKERu20dYIRAfYOA7LSNS/cijQ2/nTrY6BF8H+460qlqwlbDJm3XxATuJ7"
+  }
+}

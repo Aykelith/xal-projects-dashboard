@@ -19,6 +19,11 @@ export function setKey(key: CryptoKey): void {
   window.dispatchEvent(new CustomEvent('decrypt:unlocked'));
 }
 
+export function clearKey(): void {
+  _key = null;
+  window.dispatchEvent(new CustomEvent('decrypt:failed'));
+}
+
 export function triggerDecryptAll(): void {
   window.dispatchEvent(new CustomEvent('decrypt:all'));
 }

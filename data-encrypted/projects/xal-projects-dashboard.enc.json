@@ -1,0 +1,30 @@
+{
+  "id": "xal-projects-dashboard",
+  "title": null,
+  "stage": null,
+  "started_at": null,
+  "last_activity_at": null,
+  "last_task_id": null,
+  "last_post_id": null,
+  "home_description": null,
+  "enc_title": {
+    "iv": "0d40a489120b119b56fe3f37",
+    "data": "AE8loyPAY7znyMHz7EpZy2QnusJkyZX25e1RaNjdhSySjpiMkO4="
+  },
+  "enc_stage": {
+    "iv": "3ea999532a70d654c0e0a645",
+    "data": "XyYfhaD2MFw6TKTk0BWPIhZKWvSVY2lh6AsS"
+  },
+  "enc_started_at": {
+    "iv": "e804dcd5c74bc915b1f9d36b",
+    "data": "boqpWSx0xoDJxWqw4QKk9a14rxyDgb5gSsEQsDgSoymRUJqohaklJQ=="
+  },
+  "enc_last_activity_at": {
+    "iv": "9c4dc3bc02f38954bc6f14c0",
+    "data": "8Z3y8zQckKaKTFU5Dy7ZOX9PBKDECJlLuI1pphv8VFTBW9gEu7Ph0Q=="
+  },
+  "enc_home_description": {
+    "iv": "6daf1a11dd50be561cf807de",
+    "data": "FB4FMANLxfApp1z9fHVia3g/AFpnBbmdr1N0kWW9fI/bgJjHNguZX8hdzXWJS4SAsAi0JM8GJ0qWKJZuBo7XUB+yaivL"
+  }
+}

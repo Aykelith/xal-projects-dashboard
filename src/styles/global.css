@@ -17,6 +17,7 @@
   --stage-in_progress: #d29922;
   --stage-in_production: #238636;
   --stage-done: #8957e5;
+  --stage-on_hold: #e07d3a;
   --stage-abandoned: #da3633;
 }
 
@@ -192,6 +193,7 @@ a:hover {
 .stage-chip[data-stage="in_progress"].selected { background: var(--stage-in_progress); border-color: var(--stage-in_progress); }
 .stage-chip[data-stage="in_production"].selected { background: var(--stage-in_production); border-color: var(--stage-in_production); }
 .stage-chip[data-stage="done"].selected        { background: var(--stage-done); border-color: var(--stage-done); }
+.stage-chip[data-stage="on_hold"].selected     { background: var(--stage-on_hold); border-color: var(--stage-on_hold); }
 .stage-chip[data-stage="abandoned"].selected   { background: var(--stage-abandoned); border-color: var(--stage-abandoned); }
 
 /* ── Project card ── */
@@ -270,6 +272,7 @@ a:hover {
 .stage-badge[data-stage="in_progress"]   { background: var(--stage-in_progress); color: #0d1117; }
 .stage-badge[data-stage="in_production"] { background: var(--stage-in_production); color: #fff; }
 .stage-badge[data-stage="done"]          { background: var(--stage-done); color: #fff; }
+.stage-badge[data-stage="on_hold"]       { background: var(--stage-on_hold); color: #fff; }
 .stage-badge[data-stage="abandoned"]     { background: var(--stage-abandoned); color: #fff; }
 
 .project-card-meta {
@@ -509,7 +512,6 @@ a:hover {
 
 /* ── Prose (help page / blog post content) ── */
 .prose {
-  max-width: 740px;
 }
 .prose h1, .prose h2, .prose h3, .prose h4 {
   color: var(--text);
@@ -635,6 +637,30 @@ a:hover {
 }
 
 /* ── Encryption UI ── */
+@keyframes page-spin {
+  to { transform: rotate(360deg); }
+}
+
+.page-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 17, 23, 0.92);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.page-loading-spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: page-spin 0.8s linear infinite;
+}
+
 .password-overlay {
   position: fixed;
   inset: 0;
